@@ -37,7 +37,10 @@ const { title } = Astro.props;
 		>
 			<div class="lg:flex lg:justify-between lg:gap-4">
 				<Header />
-				<slot />
+
+				<main>
+					<slot />
+				</main>
 			</div>
 			<Footer />
 		</div>
@@ -75,4 +78,40 @@ const { title } = Astro.props;
 			background: #475569;
 		}
 	</style>
+
+	<script>
+		// Spotlight Logic
+		const spotlight = document.getElementById("spotlight");
+		document.addEventListener("mousemove", (e) => {
+			const x = e.clientX;
+			const y = e.clientY;
+			spotlight?.style.setProperty("--x", `${x}px`);
+			spotlight?.style.setProperty("--y", `${y}px`);
+		});
+
+		// Navigation Active State Logic (Simple Intersection Observer)
+		const sections = document.querySelectorAll("section");
+		const navLinks = document.querySelectorAll(".nav-link");
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				entries.forEach((entry) => {
+					if (entry.isIntersecting) {
+						navLinks.forEach((link) => {
+							link.classList.remove("active");
+							const href = link.getAttribute("href");
+							if (href && href.substring(1) === entry.target.id) {
+								link.classList.add("active");
+							}
+						});
+					}
+				});
+			},
+			{ threshold: 0.5 },
+		);
+
+		sections.forEach((section) => {
+			observer.observe(section);
+		});
+	</script>
 </html>
