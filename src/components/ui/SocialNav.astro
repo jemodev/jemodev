@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+
+type MenuItem = {
+    name: string;
+    href: string;
+    icon: string;
+};
+
+const menuItems: MenuItem[] = [
+    {
+        name: "GitHub",
+        href: "https://github.com/jersonmr",
+        icon: "octicon:mark-github-16",
+    },
+    {
+        name: "LinkedIn",
+        href: "https://linkedin.com/in/jersonmr",
+        icon: "simple-icons:linkedin",
+    },
+    {
+        name: "Twitter",
+        href: "https://twitter.com/jersonmr",
+        icon: "simple-icons:twitter",
+    },
+];
+---
+
+<ul class="ml-1 mt-8 flex items-center" aria-label="Social media">
+    {
+        menuItems.map((item) => (
+            <li class="mr-5 text-xs">
+                <a
+                    class="block hover:text-slate-200"
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    <span class="sr-only">{item.name}</span>
+                    <Icon name={item.icon} class="h-6 w-6" />
+                </a>
+            </li>
+        ))
+    }
+</ul>
