@@ -1,8 +1,31 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "@/layouts/Layout.astro";
+import { BaseWPSchema } from "@/types";
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const response = await fetch(
+    "http://localhost:10003/wp-json/wp/v2/pages?slug=about",
+);
+const json = await response.json();
+const data = BaseWPSchema.parse(json[0]);
+console.log(data);
 ---
 
-<Layout title="Inicio" />
+<Layout title="Inicio">
+    <!-- About Section -->
+    <section
+        id="about"
+        class="mb-16 scroll-mt-16 md:mb-24 lg:mb-36 lg:scroll-mt-24"
+        aria-label="About me"
+    >
+        <div
+            class="sticky top-0 z-20 -mx-6 mb-4 w-screen bg-slate-900/75 px-6 py-5 backdrop-blur md:-mx-12 md:px-12 lg:sr-only lg:relative lg:top-auto lg:mx-auto lg:w-full lg:px-0 lg:py-0 lg:opacity-0"
+        >
+            <h2
+                class="text-sm font-bold uppercase tracking-widest text-slate-200 lg:sr-only"
+            >
+                Sobre mí
+            </h2>
+        </div>
+        <div class="space-y-4" set:html={data.content.rendered} />
+    </section>
+</Layout>
