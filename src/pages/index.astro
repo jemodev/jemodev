@@ -1,13 +1,13 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { BaseWPSchema } from "@/types";
+import Experience from "@/components/experience/Experience.astro";
 
 const response = await fetch(
     "http://localhost:10003/wp-json/wp/v2/pages?slug=about",
 );
 const json = await response.json();
 const data = BaseWPSchema.parse(json[0]);
-console.log(data);
 ---
 
 <Layout title="Inicio">
@@ -28,4 +28,7 @@ console.log(data);
         </div>
         <div class="space-y-4" set:html={data.content.rendered} />
     </section>
+
+    <!-- Experience section -->
+    <Experience />
 </Layout>
