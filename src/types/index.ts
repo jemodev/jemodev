@@ -21,10 +21,8 @@ export const BaseWPSchema = z.object({
     featured_images: featureImageSchema.optional(),
 });
 
-export const ExperienceItemSchema = BaseWPSchema.pick({
-    id: true,
-    title: true,
-    content: true,
+export const ExperienceItemSchema = BaseWPSchema.omit({
+    featured_images: true,
 }).extend({
     acf: z.object({
         rol: z.string(),
@@ -36,12 +34,7 @@ export const ExperienceItemSchema = BaseWPSchema.pick({
 
 export const ExperiencesSchema = z.array(ExperienceItemSchema);
 
-export const ProjectItemSchema = BaseWPSchema.pick({
-    id: true,
-    title: true,
-    content: true,
-    featured_images: true,
-}).extend({
+export const ProjectItemSchema = BaseWPSchema.extend({
     acf: z.object({
         url: z.string().url(),
     }),
