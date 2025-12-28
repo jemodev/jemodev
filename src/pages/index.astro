@@ -1,7 +1,7 @@
 ---
 import Layout from "@/layouts/Layout.astro";
 import { BaseWPSchema } from "@/types";
-import Experience from "@/components/experience/Experience.astro";
+import Experiences from "@/components/experience/Experiences.astro";
 import Projects from "@/components/project/Projects.astro";
 
 const response = await fetch(
@@ -31,7 +31,9 @@ const data = BaseWPSchema.parse(json[0]);
     </section>
 
     <!-- Experience section -->
-    <Experience />
+    <Experiences />
+
+    <hr class="my-16 border-t border-slate-800/50" />
 
     <!-- Projects section -->
     <Projects />

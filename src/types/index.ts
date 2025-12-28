@@ -31,6 +31,7 @@ export const ExperienceItemSchema = BaseWPSchema.pick({
         working_time: z.string(),
         url: z.string(),
     }),
+    technologies: z.array(z.string()),
 });
 
 export const ExperiencesSchema = z.array(ExperienceItemSchema);
