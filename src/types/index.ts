@@ -18,7 +18,7 @@ export const BaseWPSchema = z.object({
     id: z.number(),
     title: z.object({ rendered: z.string() }),
     content: z.object({ rendered: z.string() }),
-    featured_images: featureImageSchema,
+    featured_images: featureImageSchema.optional(),
 });
 
 export const ExperienceItemSchema = BaseWPSchema.pick({

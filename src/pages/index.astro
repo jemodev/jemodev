@@ -2,6 +2,7 @@
 import Layout from "@/layouts/Layout.astro";
 import { BaseWPSchema } from "@/types";
 import Experience from "@/components/experience/Experience.astro";
+import Projects from "@/components/project/Projects.astro";
 
 const response = await fetch(
     "http://localhost:10003/wp-json/wp/v2/pages?slug=about",
@@ -31,4 +32,7 @@ const data = BaseWPSchema.parse(json[0]);
 
     <!-- Experience section -->
     <Experience />
+
+    <!-- Projects section -->
+    <Projects />
 </Layout>
