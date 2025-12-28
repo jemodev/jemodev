@@ -4,9 +4,7 @@ import { BaseWPSchema } from "@/types";
 import Experiences from "@/components/experience/Experiences.astro";
 import Projects from "@/components/project/Projects.astro";
 
-const response = await fetch(
-    "http://localhost:10003/wp-json/wp/v2/pages?slug=about",
-);
+const response = await fetch(`${import.meta.env.API_URL}/pages?slug=about`);
 const json = await response.json();
 const data = BaseWPSchema.parse(json[0]);
 ---

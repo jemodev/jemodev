@@ -1,7 +1,7 @@
 ---
 import { ExperiencesSchema } from "@/types";
 import ExperienceItem from "./ExperienceItem.astro";
-const url = "http://localhost:10003/wp-json/wp/v2/experiences";
+const url = `${import.meta.env.API_URL}/experiences`;
 const response = await fetch(url);
 const json = await response.json();
 const experiences = ExperiencesSchema.parse(json);

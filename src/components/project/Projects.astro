@@ -1,9 +1,9 @@
 ---
-import { ProjectsSchema, ProjectItemSchema } from "@/types";
+import { ProjectsSchema } from "@/types";
 import { z } from "astro:content";
 import ProjectItem from "./ProjectItem.astro";
 
-const url = "http://localhost:10003/wp-json/wp/v2/projects";
+const url = `${import.meta.env.API_URL}/projects`;
 const response = await fetch(url);
 const json = await response.json();
 const projects: z.infer<typeof ProjectsSchema> = ProjectsSchema.parse(json);
