@@ -20,6 +20,7 @@ const projects: z.infer<typeof ProjectsSchema> = ProjectsSchema.parse(json);
                 projects.map((project) => (
                     <ProjectItem
                         id={project.id}
+                        projectUrl={project.acf.url}
                         title={project.title.rendered}
                         description={project.content.rendered}
                         image={project.featured_images?.medium}

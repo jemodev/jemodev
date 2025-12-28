@@ -42,6 +42,9 @@ export const ProjectItemSchema = BaseWPSchema.pick({
     content: true,
     featured_images: true,
 }).extend({
+    acf: z.object({
+        url: z.string().url(),
+    }),
     technologies: z.array(z.string()),
 });
 
