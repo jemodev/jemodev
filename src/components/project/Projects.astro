@@ -1,12 +1,12 @@
 ---
-import { BaseWPSchema } from "@/types";
+import { ProjectsSchema, ProjectItemSchema } from "@/types";
+import { z } from "astro:content";
 import ProjectItem from "./ProjectItem.astro";
 
 const url = "http://localhost:10003/wp-json/wp/v2/projects";
 const response = await fetch(url);
 const json = await response.json();
-const projects = BaseWPSchema.array().parse(json);
-console.log(projects);
+const projects: z.infer<typeof ProjectsSchema> = ProjectsSchema.parse(json);
 ---
 
 <section id="projects" class="scroll-mt-16 lg:scroll-mt-24">
@@ -23,7 +23,7 @@ console.log(projects);
                         title={project.title.rendered}
                         description={project.content.rendered}
                         image={project.featured_images?.medium}
-                        technologies={[]}
+                        technologies={project.technologies}
                     />
                 ))
             }

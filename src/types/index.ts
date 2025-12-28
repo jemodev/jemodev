@@ -35,4 +35,17 @@ export const ExperienceItemSchema = BaseWPSchema.pick({
 
 export const ExperiencesSchema = z.array(ExperienceItemSchema);
 
+export const ProjectItemSchema = BaseWPSchema.pick({
+    id: true,
+    title: true,
+    content: true,
+    featured_images: true,
+}).extend({
+    technologies: z.array(z.string()),
+});
+
+export const ProjectsSchema = z.array(ProjectItemSchema);
+
+
+
 
