@@ -5,7 +5,6 @@ const url = "http://localhost:10003/wp-json/wp/v2/experiences";
 const response = await fetch(url);
 const json = await response.json();
 const experiences = ExperiencesSchema.parse(json);
-console.log(experiences);
 ---
 
 <section id="experience" class="scroll-mt-16 lg:scroll-mt-24">
@@ -18,7 +17,7 @@ console.log(experiences);
             {
                 experiences.map((experience) => (
                     <ExperienceItem
-                        key={experience.id}
+                        id={experience.id}
                         period={experience.acf.working_time}
                         title={experience.title.rendered}
                         company={experience.title.rendered}
