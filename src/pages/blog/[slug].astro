@@ -1,5 +1,5 @@
 ---
-import Layout from "@/layouts/Layout.astro";
+import PostLayout from "@/layouts/PostLayout.astro";
 import { PostItemSchema } from "@/types";
 import PostMeta from "@/components/blog/PostMeta.astro";
 import PostCategories from "@/components/blog/PostCategories.astro";
@@ -86,49 +86,117 @@ function processCodeBlocks(html: string): string {
 const processedContent = processCodeBlocks(content.rendered);
 ---
 
-<Layout title={title.rendered}>
-    <article class="space-y-5 max-w-4xl mx-auto">
-        <h1>{title.rendered}</h1>
+<PostLayout title={title.rendered}>
+    <!-- Post Header -->
+    <header class="mb-12 space-y-6">
+        <h1 class="text-4xl md:text-5xl font-bold text-slate-100 leading-tight">
+            {title.rendered}
+        </h1>
+
         <PostMeta date={date} />
         <PostCategories categories={post_categories} />
+    </header>
 
-        <Picture
-            src={featured_images?.full.url!}
-            alt={title.rendered}
-            width={featured_images?.full.width!}
-            height={featured_images?.full.height!}
-            formats={["avif", "webp"]}
-            class="w-full"
-        />
-
-        <div class="mt-5 text-lg space-y-3" set:html={processedContent} />
-    </article>
-    <footer></footer>
-</Layout>
-
-<style is:inline>
-    h2 {
-        font-size: 1.75rem;
-        font-weight: 600;
+    <!-- Featured Image -->
+    {
+        featured_images?.full.url && (
+            <Picture
+                src={featured_images.full.url}
+                alt={title.rendered}
+                width={featured_images.full.width}
+                height={featured_images.full.height}
+                formats={["avif", "webp"]}
+                class="w-full rounded-lg shadow-2xl mb-12"
+            />
+        )
     }
 
-    h3 {
+    <!-- Post Content -->
+    <div class="post-content" set:html={processedContent} />
+</PostLayout>
+
+<style is:inline>
+    /* Estilos específicos para el contenido del post */
+    .post-content h2 {
+        font-size: 1.875rem;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin-top: 2.5rem;
+        margin-bottom: 1rem;
+        letter-spacing: -0.025em;
+    }
+
+    .post-content h3 {
         font-size: 1.5rem;
         font-weight: 600;
+        color: #e2e8f0;
+        margin-top: 2rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .post-content h4 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #e2e8f0;
+        margin-top: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .post-content p {
+        margin-bottom: 1.5rem;
+        line-height: 1.8;
+    }
+
+    .post-content ul,
+    .post-content ol {
+        margin-bottom: 1.5rem;
+        padding-left: 1.5rem;
+    }
+
+    .post-content li {
+        margin-bottom: 0.5rem;
+    }
+
+    .post-content blockquote {
+        border-left: 4px solid #334155;
+        padding-left: 1.5rem;
+        margin: 2rem 0;
+        font-style: italic;
+        color: #94a3b8;
+    }
+
+    .post-content img {
+        border-radius: 0.5rem;
+        margin: 2rem auto;
+        max-width: 100%;
+        height: auto;
+    }
+
+    .post-content a {
+        color: #5eead4;
+        text-decoration: none;
+        border-bottom: 1px solid transparent;
+        transition: border-color 0.2s;
+    }
+
+    .post-content a:hover {
+        border-bottom-color: #5eead4;
     }
 
     /* Estilos para bloques de código renderizados por Shiki */
-    pre {
+    .post-content pre {
         padding: 1.5rem;
         border-radius: 0.5rem;
         overflow-x: auto;
-        margin: 1.5rem 0;
+        margin: 2rem 0;
         font-size: 0.875rem;
         line-height: 1.7;
         font-family: "Courier New", Courier, monospace;
+        background: #1e293b;
+        border: 1px solid #334155;
     }
 
-    pre code {
+    .post-content pre code {
         display: block;
         padding: 0;
         background: transparent;
@@ -144,14 +212,15 @@ const processedContent = processCodeBlocks(content.rendered);
     }
 
     /* Asegurar que los colores de Shiki se preserven */
-    pre code .line {
+    .post-content pre code .line {
         display: block;
         min-height: 1em;
     }
 
     /* Estilos para código inline */
-    code:not(pre code) {
-        background-color: rgba(110, 118, 129, 0.1);
+    .post-content code:not(pre code) {
+        background-color: rgba(100, 116, 139, 0.2);
+        color: #5eead4;
         padding: 0.2em 0.4em;
         border-radius: 0.25rem;
         font-size: 0.875em;
@@ -159,21 +228,21 @@ const processedContent = processCodeBlocks(content.rendered);
     }
 
     /* Scrollbar personalizado para bloques de código */
-    pre::-webkit-scrollbar {
+    .post-content pre::-webkit-scrollbar {
         height: 8px;
     }
 
-    pre::-webkit-scrollbar-track {
+    .post-content pre::-webkit-scrollbar-track {
         background: rgba(0, 0, 0, 0.1);
         border-radius: 4px;
     }
 
-    pre::-webkit-scrollbar-thumb {
+    .post-content pre::-webkit-scrollbar-thumb {
         background: rgba(255, 255, 255, 0.2);
         border-radius: 4px;
     }
 
-    pre::-webkit-scrollbar-thumb:hover {
+    .post-content pre::-webkit-scrollbar-thumb:hover {
         background: rgba(255, 255, 255, 0.3);
     }
 </style>
