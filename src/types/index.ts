@@ -43,6 +43,8 @@ export const ProjectItemSchema = BaseWPSchema.extend({
 
 export const ProjectsSchema = z.array(ProjectItemSchema);
 
+export const PostItemSchema = BaseWPSchema;
 
+export const PostsSchema = z.array(PostItemSchema);
 
-
+export type Post = z.infer<typeof PostItemSchema>;
