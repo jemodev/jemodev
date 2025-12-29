@@ -1,0 +1,179 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { PostItemSchema } from "@/types";
+import PostMeta from "@/components/blog/PostMeta.astro";
+import PostCategories from "@/components/blog/PostCategories.astro";
+import { Picture } from "astro:assets";
+import { createHighlighter } from "shiki";
+
+export const prerender = false;
+
+const { slug } = Astro.params;
+const url = `${import.meta.env.API_URL}/posts?slug=${slug}`;
+const response = await fetch(url);
+const json = await response.json();
+const post = PostItemSchema.parse(json[0]);
+const { title, content, date, featured_images, post_categories } = post;
+
+// Procesar bloques de código con Shiki
+const highlighter = await createHighlighter({
+    themes: ["github-dark"],
+    langs: [
+        "javascript",
+        "typescript",
+        "jsx",
+        "tsx",
+        "cpp",
+        "c",
+        "php",
+        "html",
+        "css",
+        "scss",
+        "json",
+        "bash",
+        "shell",
+        "sql",
+        "markdown",
+        "yaml",
+        "xml",
+    ],
+});
+
+// Función para procesar el contenido HTML y resaltar bloques de código
+function processCodeBlocks(html: string): string {
+    // Regex para encontrar bloques <pre><code class="language-xxx">...</code></pre>
+    const codeBlockRegex =
+        /<pre[^>]*><code[^>]*class="language-(\w+)"[^>]*>([\s\S]*?)<\/code><\/pre>/g;
+
+    return html.replace(codeBlockRegex, (match, lang, code) => {
+        // Decodificar entidades HTML
+        const decodedCode = code
+            .replace(/&lt;/g, "<")
+            .replace(/&gt;/g, ">")
+            .replace(/&amp;/g, "&")
+            .replace(/&quot;/g, '"')
+            .replace(/&#039;/g, "'");
+
+        try {
+            // Generar HTML con resaltado de sintaxis
+            const highlighted = highlighter.codeToHtml(decodedCode, {
+                lang: lang,
+                theme: "github-dark",
+            });
+            return highlighted;
+        } catch (error) {
+            // Si el lenguaje no está soportado, intentar con 'text'
+            console.warn(
+                `Language '${lang}' not supported, falling back to 'text'`,
+            );
+            try {
+                const highlighted = highlighter.codeToHtml(decodedCode, {
+                    lang: "text",
+                    theme: "github-dark",
+                });
+                return highlighted;
+            } catch (fallbackError) {
+                console.error(
+                    `Error highlighting code for language: ${lang}`,
+                    fallbackError,
+                );
+                return match; // Retornar el bloque original si hay error
+            }
+        }
+    });
+}
+
+const processedContent = processCodeBlocks(content.rendered);
+---
+
+<Layout title={title.rendered}>
+    <article class="space-y-5 max-w-4xl mx-auto">
+        <h1>{title.rendered}</h1>
+        <PostMeta date={date} />
+        <PostCategories categories={post_categories} />
+
+        <Picture
+            src={featured_images?.full.url!}
+            alt={title.rendered}
+            width={featured_images?.full.width!}
+            height={featured_images?.full.height!}
+            formats={["avif", "webp"]}
+            class="w-full"
+        />
+
+        <div class="mt-5 text-lg space-y-3" set:html={processedContent} />
+    </article>
+    <footer></footer>
+</Layout>
+
+<style is:inline>
+    h2 {
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+
+    h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+    /* Estilos para bloques de código renderizados por Shiki */
+    pre {
+        padding: 1.5rem;
+        border-radius: 0.5rem;
+        overflow-x: auto;
+        margin: 1.5rem 0;
+        font-size: 0.875rem;
+        line-height: 1.7;
+        font-family: "Courier New", Courier, monospace;
+    }
+
+    pre code {
+        display: block;
+        padding: 0;
+        background: transparent;
+        border: none;
+        font-size: inherit;
+        line-height: inherit;
+        color: inherit;
+        white-space: pre;
+        word-spacing: normal;
+        word-break: normal;
+        word-wrap: normal;
+        tab-size: 4;
+    }
+
+    /* Asegurar que los colores de Shiki se preserven */
+    pre code .line {
+        display: block;
+        min-height: 1em;
+    }
+
+    /* Estilos para código inline */
+    code:not(pre code) {
+        background-color: rgba(110, 118, 129, 0.1);
+        padding: 0.2em 0.4em;
+        border-radius: 0.25rem;
+        font-size: 0.875em;
+        font-family: "Courier New", Courier, monospace;
+    }
+
+    /* Scrollbar personalizado para bloques de código */
+    pre::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    pre::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+    }
+
+    pre::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+    }
+
+    pre::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+</style>

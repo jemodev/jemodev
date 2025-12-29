@@ -1,0 +1,16 @@
+---
+import { formatDate } from "@/helpers";
+
+interface Props {
+    date: string;
+}
+
+const { date } = Astro.props;
+---
+
+<p>
+    Publicado el <time
+        class="text-white/80 text-sm font-semibold"
+        datetime={date}>{formatDate(date)}</time
+    >
+</p>

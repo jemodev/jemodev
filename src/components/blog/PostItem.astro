@@ -1,6 +1,7 @@
 ---
 import type { Post } from "@/types";
-import { formatDate } from "@/helpers";
+import PostMeta from "./PostMeta.astro";
+import PostCategories from "./PostCategories.astro";
 
 interface Props {
     post: Post;
@@ -12,38 +13,20 @@ const { post } = Astro.props;
 <article>
     <header>
         <h2 class="text-2xl font-bold leading-tight tracking-tighter">
-            <a href={"#"} target="_blank" rel="noreferrer noopener">
+            <a
+                href={`/blog/${post.slug}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                aria-label={post.title.rendered}
+            >
                 {post.title.rendered}
             </a>
         </h2>
     </header>
     <div class="mt-2 line-clamp-3" set:html={post.content.rendered} />
     <footer class="mt-4">
-        <p>
-            Publicado el <time
-                class="text-white/80 text-sm font-semibold"
-                datetime={post.date}>{formatDate(post.date)}</time
-            >
-        </p>
-
-        <ul class="mt-2 flex flex-wrap" aria-label="Technologies used">
-            {
-                post.post_categories.map((cat) => (
-                    <li class="mr-1.5 mt-2">
-                        <a
-                            href={cat.slug}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            aria-label={`${cat.name} (opens in a new tab)`}
-                        >
-                            <div class="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300">
-                                {cat.name}
-                            </div>
-                        </a>
-                    </li>
-                ))
-            }
-        </ul>
+        <PostMeta date={post.date} />
+        <PostCategories categories={post.post_categories} />
     </footer>
 </article>
 
