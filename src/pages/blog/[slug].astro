@@ -1,6 +1,6 @@
 ---
 import PostLayout from "@/layouts/PostLayout.astro";
-import { PostItemSchema } from "@/types";
+import { PostItemSchema, type Post } from "@/types";
 import PostMeta from "@/components/blog/PostMeta.astro";
 import PostCategories from "@/components/blog/PostCategories.astro";
 import { Picture } from "astro:assets";
@@ -12,8 +12,14 @@ const { slug } = Astro.params;
 const url = `${import.meta.env.API_URL}/posts?slug=${slug}`;
 const response = await fetch(url);
 const json = await response.json();
-const post = PostItemSchema.parse(json[0]);
-const { title, content, date, featured_images, post_categories } = post;
+const post = PostItemSchema.safeParse(json[0]);
+
+if (!post.success) {
+    return Astro.redirect("/404");
+}
+
+const { title, content, date, featured_images, post_categories } =
+    post.data as Post;
 
 // Procesar bloques de código con Shiki
 const highlighter = await createHighlighter({
