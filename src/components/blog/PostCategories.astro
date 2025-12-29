@@ -11,9 +11,7 @@ const { categories } = Astro.props;
         categories.map((cat) => (
             <li class="mr-1.5 mt-2">
                 <a
-                    href={cat.slug}
-                    target="_blank"
-                    rel="noreferrer noopener"
+                    href={`/blog/category/${cat.slug}`}
                     aria-label={`${cat.name} (opens in a new tab)`}
                 >
                     <div class="flex items-center rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300">

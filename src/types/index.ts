@@ -44,12 +44,15 @@ export const ProjectItemSchema = BaseWPSchema.extend({
 
 export const ProjectsSchema = z.array(ProjectItemSchema);
 
-const CategorySchema = z.object({
+export const CategorySchema = z.object({
+    id: z.number(),
     name: z.string(),
     slug: z.string(),
 });
 
 const CategoriesSchema = z.array(CategorySchema);
+
+export const CategorySlugSchema = z.array(CategorySchema.pick({ slug: true }));
 
 export const PostItemSchema = BaseWPSchema.extend({
     date: z.string(),

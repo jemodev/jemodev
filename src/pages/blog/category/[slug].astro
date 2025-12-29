@@ -1,0 +1,63 @@
+---
+import PostItem from "@/components/blog/PostItem.astro";
+import Layout from "@/layouts/Layout.astro";
+import { CategorySchema, CategorySlugSchema, PostsSchema } from "@/types";
+
+export async function getStaticPaths() {
+    const response = await fetch(
+        `${import.meta.env.API_URL}/categories?_fields=slug`,
+    );
+    const json = await response.json();
+    const categories = CategorySlugSchema.parse(json);
+
+    return categories.map((category) => ({
+        params: { slug: category.slug },
+    }));
+}
+
+const { slug } = Astro.params;
+const catUrl = `${import.meta.env.API_URL}/categories?slug=${slug}`;
+const catResponse = await fetch(catUrl);
+const catJson = await catResponse.json();
+const category = CategorySchema.parse(catJson[0]);
+
+if (!category) {
+    return Astro.redirect("/404");
+}
+
+console.log({ category });
+
+const postsUrl = `${import.meta.env.API_URL}/posts?categories=${category.id}`;
+const postsResponse = await fetch(postsUrl);
+const postsJson = await postsResponse.json();
+const posts = PostsSchema.parse(postsJson);
+
+console.log(posts);
+---
+
+<Layout title={`Posts en la categoría ${category.name}`}>
+    {
+        posts.map((post, index) => (
+            <>
+                <PostItem post={post} />
+                {index < posts.length - 1 && (
+                    <div class="my-12 flex items-center">
+                        <div
+                            aria-hidden="true"
+                            class="w-full border-t border-zinc-300/20"
+                        />
+                        <div class="relative flex justify-center">
+                            <span class="bg-slate-900 px-2 text-sm text-zinc-500">
+                                Continue
+                            </span>
+                        </div>
+                        <div
+                            aria-hidden="true"
+                            class="w-full border-t border-zinc-300/20"
+                        />
+                    </div>
+                )}
+            </>
+        ))
+    }
+</Layout>
