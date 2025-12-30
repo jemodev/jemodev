@@ -31,8 +31,6 @@ const postsUrl = `${import.meta.env.API_URL}/posts?categories=${category.id}`;
 const postsResponse = await fetch(postsUrl);
 const postsJson = await postsResponse.json();
 const posts = PostsSchema.parse(postsJson);
-
-console.log(posts);
 ---
 
 <Layout title={`Posts en la categoría ${category.name}`}>
