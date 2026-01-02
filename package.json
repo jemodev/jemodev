@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/netlify": "^6.6.3",
     "@iconify-json/octicon": "^1.2.19",
     "@iconify-json/simple-icons": "^1.2.63",
     "@tailwindcss/vite": "^4.1.17",

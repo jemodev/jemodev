@@ -5,10 +5,16 @@ import tailwindcss from '@tailwindcss/vite';
 
 import icon from 'astro-icon';
 
+import netlify from "@astrojs/netlify";
+
 // https://astro.build/config
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
+  },
+
+  image: {
+    domains: ["localhost:10003", "linen-antelope-447525.hostingersite.com"]
   },
 
   integrations: [
@@ -19,4 +25,6 @@ export default defineConfig({
       },
     }),
   ],
+
+  adapter: netlify(),
 });
