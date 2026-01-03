@@ -2,7 +2,21 @@
 import PostItem from "./PostItem.astro";
 import type { Post } from "@/types";
 
-const url = `${import.meta.env.API_URL}/posts`;
+interface Props {
+    limit?: number;
+}
+
+const { limit } = Astro.props;
+
+// Construir la URL con parámetros de WordPress REST API
+// _embed: incluye datos relacionados (categorías, autor, etc.)
+// orderby=date&order=desc: ordena por fecha descendente (más recientes primero)
+// per_page: limita la cantidad de resultados
+let url = `${import.meta.env.API_URL}/posts?_embed&orderby=date&order=desc`;
+if (limit) {
+    url += `&per_page=${limit}`;
+}
+
 const response = await fetch(url);
 const json = await response.json();
 const posts: Post[] = json;
