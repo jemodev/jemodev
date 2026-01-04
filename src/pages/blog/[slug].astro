@@ -10,7 +10,14 @@ export const prerender = false;
 
 const { slug } = Astro.params;
 const url = `${import.meta.env.API_URL}/posts?slug=${slug}`;
-const response = await fetch(url);
+const response = await fetch(url, {
+    cache: "no-store",
+    headers: {
+        "Cache-Control": "no-cache, no-store, must-revalidate",
+        Pragma: "no-cache",
+        Expires: "0",
+    },
+});
 const json = await response.json();
 const post = PostItemSchema.safeParse(json[0]);
 
