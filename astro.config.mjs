@@ -1,30 +1,32 @@
 // @ts-check
-import { defineConfig } from 'astro/config';
+import { defineConfig } from "astro/config";
 
-import tailwindcss from '@tailwindcss/vite';
+import tailwindcss from "@tailwindcss/vite";
 
-import icon from 'astro-icon';
+import icon from "astro-icon";
 
 import netlify from "@astrojs/netlify";
 
 // https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [tailwindcss()]
-  },
+    output: "server",
 
-  image: {
-    domains: ["localhost:10003", "linen-antelope-447525.hostingersite.com"]
-  },
+    vite: {
+        plugins: [tailwindcss()],
+    },
 
-  integrations: [
-    icon({
-      include: {
-        octicon: ["*"],
-        "simple-icons": ["*"],
-      },
-    }),
-  ],
+    image: {
+        domains: ["localhost:10003", "linen-antelope-447525.hostingersite.com"],
+    },
 
-  adapter: netlify(),
+    integrations: [
+        icon({
+            include: {
+                octicon: ["*"],
+                "simple-icons": ["*"],
+            },
+        }),
+    ],
+
+    adapter: netlify(),
 });
