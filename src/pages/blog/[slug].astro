@@ -77,7 +77,7 @@ function processCodeBlocks(html: string): string {
         } catch (error) {
             // Si el lenguaje no está soportado, intentar con 'text'
             console.warn(
-                `Language '${lang}' not supported, falling back to 'text'`,
+                `Language '${lang}' not supported, falling back to 'text'`
             );
             try {
                 const highlighted = highlighter.codeToHtml(decodedCode, {
@@ -88,7 +88,7 @@ function processCodeBlocks(html: string): string {
             } catch (fallbackError) {
                 console.error(
                     `Error highlighting code for language: ${lang}`,
-                    fallbackError,
+                    fallbackError
                 );
                 return match; // Retornar el bloque original si hay error
             }
