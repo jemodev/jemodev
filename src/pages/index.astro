@@ -1,5 +1,10 @@
 ---
 export const prerender = false;
+Astro.response.headers.set(
+    "Cache-Control",
+    "public, max-age=0, must-revalidate"
+);
+Astro.response.headers.set("X-Cache-Control", "no-cache");
 
 import Layout from "@/layouts/Layout.astro";
 import { BaseWPSchema } from "@/types";
